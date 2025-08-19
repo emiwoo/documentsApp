@@ -1,0 +1,94 @@
+.registerModule {
+    margin: 0 auto;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.registerModule label {
+    font-weight: 550;
+    margin-bottom: 7.5px;
+}
+
+.registerModule input {
+    margin-bottom: 25px;
+    height: 37.5px;
+    outline: none;
+    border-radius: 8.5px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    padding: 0 10px;
+}
+
+.registerModule > button {
+    margin-top: 10px;
+    padding: 15px 0;
+    font-family: 'inter';
+    font-weight: 550;
+    background-color: #ff5c5fb0;
+    border: none;
+    border-radius: 30px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    color: white;
+    pointer-events: none;
+}
+
+.registerModule > .enabledButton {
+    pointer-events: auto;
+    background-color: #ff5c5f;
+}
+
+.validPassword {
+    background-color: #ff5c5f;
+}
+
+.passwordErrorContainer {
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    color: rgb(0, 166, 0);
+}
+
+.passwordErrorContainer h1 {
+    font-size: 1rem;
+    font-weight: 400;
+    margin-top: 0px;
+    color: black;
+}
+
+.usernameError {
+    top: 105px;
+    position: absolute;
+    color: red;
+}
+
+.registerModule .errorBorder {
+    border-color: red;
+}
+
+.passwordError {
+    color: red;
+}
+
+.loginHereText {
+    font-size: 0.8rem;
+    margin-top: 22.5px;
+    color: black;
+    cursor: pointer;
+}
+
+.registerModule img {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 178.5px;
+    right: 50px;
+}

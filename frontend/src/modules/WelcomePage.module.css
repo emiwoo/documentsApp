@@ -1,0 +1,239 @@
+.turkeyImage {
+    width: 100px;
+    height: 100px;
+}
+
+.navBar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navBar ul {
+    list-style-type: none;
+    display: flex;
+    font-size: 1.5rem;
+    font-weight: 600;
+    gap: 100px;
+    align-items: center;
+}
+
+.navBar ul:hover {
+    cursor: default;
+}
+
+.navBar .loginButton {
+    font-family: 'inter';
+    font-weight: 600;
+    font-size: 1.5rem;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 7.5px;
+    background-color: #ff5c5f;
+    color: #faf0e6;
+    box-shadow: 0px 10px 15px rgba(0,0,0,0.1);
+    transition: transform 0.25s ease;
+}
+
+.navBar .loginButton:visited {
+    color: white;
+}
+
+.navBar button:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.navBar a {
+    transition: transform 0.25s ease;
+    text-decoration: none;
+}
+
+.navBar a:visited {
+    color: black;
+}
+
+.navBar a:hover {
+    transform: scale(1.075);
+    cursor: pointer;
+}
+
+.header {
+    width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header video {
+    margin-top: 80px;
+    width: 800px;
+}
+
+.header h1 {
+    font-size: 7.5rem;
+    margin-bottom: 0px;
+}
+
+.header p {
+    font-size: 2rem;
+}
+
+.registerButton {
+    font-family: 'inter';
+    font-weight: 600;
+    font-size: 2rem;
+    padding: 25px 35px;
+    border: none;
+    border-radius: 15px;
+    background-color: #ff5c5f;
+    color: #faf0e6;
+    margin-top: 60px;
+    box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
+    transition: transform .25s ease;
+    text-decoration: none;
+}
+
+.registerButton:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.featuresSection {
+    background-color: #003949;
+    padding: 20px 0;
+    margin: 120px 0 0 0;
+}
+
+.marginApplyHeaderAndFooter {
+    margin: 6rem 12rem;
+}
+
+.featuresSection h1 {
+    font-size: 4rem;
+    color: #faf0e6;
+}
+
+.featuresSection p {
+    font-size: 1.75rem;
+    color: #faf0e6;
+}
+
+.featuresSectionContainer {
+    margin: 50px 24rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.featuresImage {
+    height: 400px;
+}
+
+.pricingSection {
+    background-color: #ffb865;
+    padding: 20px 0;
+}
+
+.pricingSection h1 {
+    margin: 0 0 50px 0;
+    font-size: 4rem;
+}
+
+.pricingSectionContainer {
+    margin: 50px 24rem 100px 24rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pricingSectionCardContainer {
+    display: flex;
+    gap: 40px;
+}
+
+.pricingCard {
+    width: 300px;
+    height: 325px;
+    background-color: white;
+    padding: 40px 60px;
+    border-radius: 20px;
+    box-shadow: 0 15px 20px rgba(0,0,0,0.1);
+}
+
+.pricingCard h1 {
+    font-size: 2rem;
+    margin: 0;
+}
+
+.pricingCard h2 {
+    font-size: 2.5rem;
+    margin: 15px 0 30px 0;
+    padding-bottom: 20px;
+    border-bottom: 1.5px solid rgba(0, 0, 0, 0.35);
+}
+
+.pricingCard p {
+    font-size: 1.5rem;
+}
+
+.paidCardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.paidCardHeader h4 {
+    margin: 0;
+    background-color: #fcefee;
+    color: #a4291e;
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+
+.priceCardHeader {
+    position: relative;
+}
+
+.priceCardHeader h3 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: rgb(70, 70, 70);
+    text-decoration: line-through;
+}
+
+.aboutSection {
+    background-color: #fddff8;
+    padding: 20px 0;
+}
+
+.aboutSectionContainer {
+    margin: 50px 24rem 100px 24rem;   
+    display: flex;
+    justify-content: space-between;
+}
+
+.aboutSectionContainer h1 {
+    font-size: 4rem;
+    text-align: right;
+}
+
+.aboutSectionContainer p {
+    font-size: 1.75rem;
+    width: 650px;
+}
+
+.aboutImage {
+    height: 400px;
+}
+
+.footer {
+    background-color: rgb(161, 211, 161);
+    padding: 50px 0;
+}
+
+.footer p {
+    margin: 0;
+    text-align: center;
+    font-weight: 500;
+}

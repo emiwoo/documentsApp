@@ -1,0 +1,21 @@
+.tiptap {
+    width: 615px;
+    height: 870px;
+    background-color: white;
+    outline: none;
+    border: 1px solid black;
+    margin: 100px auto;
+    padding: 90px 100px;
+}
+
+.tiptap h1 {
+    font-size: 2rem;
+}
+
+.tiptap h2 {
+    font-size: 1.75rem;
+}
+
+.tiptap h3 {
+    font-size: 1.5rem;
+}

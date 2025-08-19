@@ -1,0 +1,171 @@
+.container {
+    background-color: white;
+    width: 200px;
+    height: 350px;
+    border-radius: 10px;
+    border: 1px solid black;
+    transition: border-color 0.2s ease;
+    position: relative;
+}
+
+.container:hover {
+    border-color: rgb(107, 107, 255);
+    cursor: pointer;
+}
+
+.imageContainer {
+    width: 200px;
+    height: 250px;
+}
+
+.imageContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
+
+.textContainer {
+    width: 175px;
+    height: 100px;
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto auto;
+    padding: 0 12.5px;
+}
+
+.textContainer h1 {
+    font-size: 0.85rem;
+    grid-column: 1 / 3;
+    font-weight: 500;
+    padding-top: 10px;
+    white-space: nowrap;
+    max-width: 175px;
+}
+
+.textContainer p {
+    grid-row-start: 2;
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.5);
+    padding-bottom: 10px;
+}
+
+.textContainer .ellipsis {
+    grid-row-start: 2;
+    width: 30px;
+    height: 30px;
+    align-self: center;
+    justify-self: end;
+    background-color: white;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.textContainer .ellipsis:hover {
+    filter: brightness(0.95);
+}
+
+.documentMenu {
+    background-color: white;
+    border-radius: 10px;
+    width: 225px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    font-size: 14px;
+}
+
+.documentMenu .svg {
+    width: 25px;
+    height: 25px;
+}
+
+.documentMenu section {
+    display: flex;
+    gap: 15px;
+    font-weight: 350;
+    padding: 7.5px 0 7.5px 12.5px;
+    background-color: white;
+    align-items: center;
+}
+
+.documentMenu section:hover {
+    filter: brightness(0.95);
+}
+
+.documentMenu .section1 {
+    padding-top: 10px;
+    border-radius: 5px 5px 0 0;
+}
+
+.documentMenu .section3 {
+    padding-bottom: 10px;
+    border-radius: 0 0 5px 5px;
+}
+
+.documentContainer {
+    position: absolute;
+    bottom: -115px;
+    right: -80px;
+    z-index: 1;
+}
+
+.renameModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width: 275px;
+    padding: 20px 30px;
+    border-radius: 8.5px;
+}
+
+.renameModal h1 {
+    font-size: 1.25rem;
+    font-weight: 400;
+}
+
+.renameModal input {
+    width: 275px;
+    margin: 10px 0 30px 0;
+    padding: 7.5px 10px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.renameModal section {
+    display: flex;
+    gap: 20px;
+    justify-content: end;
+}
+
+.renameModal button {
+    border: 1px black solid;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: 450;
+    background-color: white;
+}
+
+.renameModal button:hover {
+    filter: brightness(0.95);
+    cursor: pointer;
+}
+
+.renameModal:hover {
+    cursor: default;
+}
+
+.dimmer {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    top: 0;
+    left: 0;
+}
+
+.dimmer:hover {
+    cursor: default;
+}

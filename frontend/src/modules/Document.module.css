@@ -1,0 +1,250 @@
+.toolbar {
+    width: 950px;
+    height: 50px;
+    background-color: white;
+    border: 1px solid black;
+    box-shadow: 0 7.5px 10px rgba(0,0,0,0.1);
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    justify-content: center;
+}
+
+.toolbar section {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-right: 1px solid rgba(0,0,0,0.5);
+    gap: 15px;
+}
+
+.toolbar p {
+    margin: 0;
+}
+
+.toolbar input {
+    width: 30px;
+    height: 27.5px;
+    font-size: 1rem;
+    text-align: center;
+    outline: none;
+}
+
+.toolbar .angleDownSolid {
+    width: 20px;
+    height: 20px;
+    padding-left: 15px;
+}
+
+.toolbar article {
+    display: flex;
+    background-color: white;
+    padding: 7.5px 12.5px;
+    border-radius: 5px;
+}
+
+.toolbar .list {
+    box-shadow: 0 5px 5px rgba(0,0,0,0.1);
+    position: absolute;
+    top: 45px;
+    background-color: white; 
+    padding: 10px 0;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 135px;
+}
+
+.toolbar .list p {
+    padding: 10px 12.5px;
+    background-color: white;
+}
+
+.toolbar .typeList {
+    left: 260px;
+}
+
+.toolbar .fontList {
+    left: 450px;
+}
+
+.toolbar .list p:hover {
+    filter: brightness(0.95);
+}
+
+.toolbar .list .activeFont {
+    color: rgb(107, 107, 255);
+}
+
+.toolbar article:hover {
+    filter: brightness(0.95);
+    cursor: pointer;
+}
+
+.toolbar article .selectedFont {
+    width: 100px;
+}
+
+.toolbar article .selectedTextType {
+    width: 80px;
+}
+
+.toolbar .removeBorder {
+    border: none;
+}
+
+.toolbar .icon {
+    background-color: white;
+    padding: 5px;
+    border-radius: 5px;
+    width: 25px;
+    height: 25px;
+}
+
+.toolbar .icon:hover {
+    filter: brightness(0.95);
+    cursor: pointer;
+}
+
+.toolbar .iconActive {
+    filter: brightness(0.95);
+    fill: rgb(107, 107, 255);
+}
+
+.arrowLeftSolid {
+    background-color: white;
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+    border-radius: 50%;
+    padding: 12.5px;
+    box-shadow: 0 7.5px 7.5px rgba(0,0,0,0.1);
+}
+
+.toolbarContainer {
+    position: fixed;
+    top: -200px;
+    display: flex;
+    gap: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.toggleMenuButton {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background-color: white;
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+    border-radius: 50%;
+    padding: 12.5px;
+}
+
+.toolbarSlideIn {
+    animation: toolbarSlideIn 0.5s ease-in-out forwards;
+}
+
+.toolbarSlideOut {
+    animation: toolbarSlideOut 0.5s ease-in-out forwards;
+}
+
+@keyframes toolbarSlideIn {
+    0% {
+        top: -200px;
+    }
+    100% {
+        top: 20px;
+    }
+}
+
+@keyframes toolbarSlideOut {
+    0% {
+        top: 20px;
+    }
+    100% {
+        top: -200px;
+    }
+}
+
+.menu {
+    background-color: white;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    border: 1px solid black;
+}
+
+.menu section {
+    background-color: white;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.menu .section1 {
+    border-radius: 15px 15px 0 0;
+}
+
+.menu .section3 {
+    border-radius: 0 0 15px 15px;
+}
+
+.menu .section1Svg {
+    width: 30px;
+    height: 30px;
+    padding: 18px 12px 12.5px 12px;
+    border-radius: 15px 15px 0 0;
+}
+
+.menu .section2Svg {
+    width: 30px;
+    height: 30px;
+    padding: 12.5px;
+}
+
+.menu .section3Svg {
+    width: 30px;
+    height: 30px;
+    padding: 12.5px 12px 18px 12px;
+    border-radius: 0 0 15px 15px;
+}
+
+.menu section:hover {
+    filter: brightness(0.95);
+    cursor: pointer;
+}
+
+.menuContainer {
+    position: fixed;
+    right: -300px;
+    bottom: 100px;
+}
+
+.menuSlideIn {
+    animation: menuSlideIn 0.6s ease-in-out forwards;
+}
+
+.menuSlideOut {
+    animation: menuSlideOut 0.6s ease-in-out forwards;
+}
+
+@keyframes menuSlideIn {
+    0% {
+        right: -300px;
+    }
+    100% {
+        right: 20px;
+    }
+}
+
+@keyframes menuSlideOut {
+    0% {
+        right: 20px;
+    }
+    100% {
+        right: -300px;
+    }
+}

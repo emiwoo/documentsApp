@@ -1,0 +1,28 @@
+.container {
+    background-color: white;
+    width: 200px;
+    height: 350px;
+    border-radius: 10px;
+    border: 1px solid black;
+    position: relative;
+    transition: border-color 0.2s ease;
+}
+
+.container .plusSolid {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    transition: fill 0.2s ease;
+}
+
+.container:hover {
+    cursor: pointer;
+    border-color: rgb(107, 107, 255);
+}
+
+.container:hover .plusSolid {
+    fill: rgb(107, 107, 255);
+}

@@ -1,0 +1,123 @@
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+}
+
+.userInfo {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    align-items: center;
+    position: relative;
+}
+
+.userInfo label {
+    width: 85px;
+}
+
+.userInfo button {
+    padding: 10px;
+    font-weight: 500;
+    font-size: 0.7rem;
+}
+
+.userInfo input {
+    outline: none;
+    height: 34px;
+}
+
+.userInfo p {
+    position: absolute;
+    top: 27.5px;
+    left: 105px;
+    color: red;
+}
+
+.tier {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.tier span {
+    background-color: #ff5c5f;
+    color: white;
+    padding: 12.5px 22.5px;
+    border-radius: 15px;
+    box-shadow: 0 2.5px 5px rgba(0,0,0,0.1);
+    font-weight: 600;
+}
+
+.tier button {
+    font-weight: 500;
+    padding: 10px;
+}
+
+.verify {
+    margin-top: 20px;
+}
+
+.verifyBanner {
+    background-color: #ff5c5f;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+    color: white;
+    font-weight: 500;
+    margin-top: 25px;
+    position: relative;
+}
+
+.verifyBanner input {
+    padding: 10px 15px;
+    outline: none;
+}
+
+.verifyBanner div {
+    display: flex;
+    width: 300px;
+    justify-content: space-between;
+}
+
+.verifyBanner input::placeholder {
+    color: grey;
+    font-style: italic;
+}
+
+.verifyBanner button {
+    font-weight: 500;
+    padding: 0 10px;
+}
+
+.codeError {
+    position: absolute;
+    bottom: -50px;
+    font-style: italic;
+    color: red;
+    font-weight: 400;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1.5px solid rgba(0, 0, 0, 0.15);
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.userInfo img {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 215px;
+}
+
+.tier .verifiedAccount {
+    background-color: rgb(88, 186, 88);
+}

@@ -1,0 +1,122 @@
+.documentCardContainer {
+    margin: 0 auto 200px auto;
+    display: flex;
+    gap: 40px;
+    width: 1174px;
+    flex-wrap: wrap;
+}
+
+.searchBar {
+    margin: 40px auto 100px auto;
+    position: relative;
+    width: 442.7px;
+}
+
+.searchBar input {
+    width: 350px;
+    padding: 20px 20px 20px 80px;
+    border-radius: 50px;
+    border: 1.5px solid black;
+    outline: none;
+}
+
+.searchBar .magnifyingGlass {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 30px;
+    top: 15px;
+}
+
+.barsSvg {
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.menu {
+    background-color: white;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    border: 1px solid black;
+}
+
+.menu section {
+    background-color: white;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.menu .section1 {
+    border-radius: 15px 15px 0 0;
+}
+
+.menu .section3 {
+    border-radius: 0 0 15px 15px;
+}
+
+.menu .section1Svg {
+    width: 30px;
+    height: 30px;
+    padding: 18px 12px 12.5px 12px;
+    border-radius: 15px 15px 0 0;
+}
+
+.menu .section2Svg {
+    width: 30px;
+    height: 30px;
+    padding: 12.5px;
+}
+
+.menu .section3Svg {
+    width: 30px;
+    height: 30px;
+    padding: 12.5px 12px 18px 12px;
+    border-radius: 0 0 15px 15px;
+}
+
+.menu section:hover {
+    filter: brightness(0.95);
+    cursor: pointer;
+}
+
+.menuContainer {
+    position: fixed;
+    right: -300px;
+    bottom: 100px;
+}
+
+.slideIn {
+    animation: slideIn 0.6s ease-in-out forwards;
+}
+
+.slideOut {
+    animation: slideOut 0.6s ease-in-out forwards;
+}
+
+@keyframes slideIn {
+    0% {
+        right: -300px;
+    }
+    100% {
+        right: 20px;
+    }
+}
+
+@keyframes slideOut {
+    0% {
+        right: 20px;
+    }
+    100% {
+        right: -300px;
+    }
+}
