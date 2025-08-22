@@ -328,8 +328,9 @@ const createJWT = (id, res) => {
     res.cookie('token', token, {
         maxAge: 3600 * 1000,
         httpOnly: true,
-        sameSite: 'lax',
-        path: '/'
+        sameSite: 'None',
+        path: '/',
+        secure: true
     });
 }
 
