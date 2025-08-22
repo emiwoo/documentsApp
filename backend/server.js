@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
 const { Pool } = require('pg');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
@@ -15,20 +14,8 @@ app.use(cors({
 }));
 
 const pool = new Pool({
-    host: process.env.DATABASE_HOST,
-    port: process.env.DATABASE_PORT,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME
-});
-
-const transporter = nodemailer.createTransport({
-    host: 'sandbox.smtp.mailtrap.io',
-    port: 2525,
-    auth: {
-        user: 'f36b8aef1634da',
-        pass: 'ce375e9d535e60'
-    }
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
 });
 
 app.use('/api/private', (req, res, next) => {
