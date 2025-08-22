@@ -13,10 +13,11 @@ import TrashCanSolid from'./assets/svgs/trash-can-solid-full.svg?react';
 
 function Dashboard() {
     const navigate = useNavigate();
-    const [activeMenu, setActiveMenu] = useState(false);
+    const [activeMenu, setActiveMenu] = useState(null);
     const [documents, setDocuments] = useState([]);
     const [activeDocumentMenuId, setActiveDocumentMenuId] = useState('');
     const [updateDashboard, setUpdateDashboard] = useState(0);
+    const [activeTrashMenu, setActiveTrashMenu] = useState('');
 
     const verifyInitialAccess = async () => {
         try {
@@ -63,11 +64,22 @@ function Dashboard() {
             </div>
             <BarsSolid
                 className={styles.barsSvg}
-                onClick={() => setActiveMenu(!activeMenu)}
+                onClick={() => setActiveMenu(() => {
+                    if (activeMenu === false) return true;
+                    if (activeMenu === true) return false;
+                    if (activeMenu === null) return true;
+                })}
             />
-            <div className={`${styles.menuContainer} ${activeMenu ? styles.slideIn : styles.slideOut}`}>
-                <Menu />
+            <div className={`${styles.menuContainer} ${activeMenu !== null ? (activeMenu ? styles.slideIn : styles.slideOut) : ''}`}>
+                <Menu setActiveTrashMenu={setActiveTrashMenu} />
             </div>
+            {activeTrashMenu && <>
+                <div className={styles.dimmer}></div>
+                <Trash 
+                    setActiveTrashMenu={setActiveTrashMenu}
+                    setUpdateDashboard={setUpdateDashboard}
+                />
+            </>}
         </>
     );
 }
@@ -99,7 +111,7 @@ function SearchBar({ setDocuments }) {
     );
 }
 
-function Menu() {
+function Menu({ setActiveTrashMenu }) {
     const navigate = useNavigate();
 
     const logoutUser = async () => {
@@ -121,7 +133,7 @@ function Menu() {
                 <GearSolid className={styles.section1Svg} />
                 <span>Account</span>
             </section>
-            <section>
+            <section onClick={() => setActiveTrashMenu(true)}>
                 <TrashCanSolid className={styles.section2Svg} />
                 <span>Trash</span>
             </section>
@@ -131,6 +143,99 @@ function Menu() {
             >
                 <ArrowRightFromBracketSolid className={styles.section3Svg} />
                 <span>Log out</span>
+            </section>
+        </div>
+    );
+}
+
+function Trash({ setActiveTrashMenu, setUpdateDashboard }) {
+    const [trashedDocuments, setTrashedDocuments] = useState([]);
+    const [selectedDocuments, setSelectedDocuments] = useState([]);
+
+    const loadTrashedDocuments = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/private/loadtrasheddocuments`, { withCredentials: true });
+            setTrashedDocuments(response.data);
+        } catch (error) {
+            console.error(error.response.data);
+        }
+    }
+
+    const recoverDocuments = async () => {
+        try {
+            const response = await axios.patch(`${import.meta.env.VITE_API_URL}/api/private/recoverdocuments`, {
+                documentIds: selectedDocuments }, { withCredentials: true });
+            console.log(response.data);
+            loadTrashedDocuments();
+            setUpdateDashboard(prev => prev += 1);
+        } catch (error) {
+            console.error(error.response.data);
+        }
+    }
+
+    const permanentlyDeleteDocuments = async () => {
+        try {
+            const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/private/deletedocuments`, { 
+                data: { documentIds: selectedDocuments },    
+                withCredentials: true 
+            });
+            console.log(response.data);
+            loadTrashedDocuments();
+        } catch (error) {
+            console.error(error.response.data);
+        }
+    }
+
+    useEffect(() => {
+        loadTrashedDocuments();
+    }, []);
+
+    return (
+        <div className={styles.trashMenu}>
+            <h1>Trash</h1>
+            <section>
+                {trashedDocuments.map(trashedDocument => 
+                    <DocumentTrashCard
+                        key={trashedDocument.id}
+                        title={trashedDocument.title}
+                        modifiedAt={trashedDocument.modified_at}
+                        setSelectedDocuments={setSelectedDocuments}
+                        documentId={trashedDocument.doc_id}
+                    />
+                )}
+            </section>
+            <div className={styles.trashMenuButtons}>
+                <button onClick={() => setActiveTrashMenu(false)}>Cancel</button>
+                <button onClick={recoverDocuments}>Recover</button>
+                <button onClick={permanentlyDeleteDocuments}>Permanently delete</button>
+            </div>
+        </div>
+    );
+}
+
+function DocumentTrashCard({ title, modifiedAt, setSelectedDocuments, documentId } ) {
+    const [selected, setSelected] = useState(false);
+    const localDate = new Date(modifiedAt);
+
+    return (
+        <div 
+            className={`${styles.container} ${selected ? styles.activelySelected : ''}`}
+            onClick={() => {
+                setSelected(!selected);
+                if (!selected) setSelectedDocuments(prev => [...prev, documentId]);
+                if (selected) setSelectedDocuments(prev => prev.filter(docId => docId !== documentId));
+            }}
+        >
+            <section className={styles.imageContainer}>
+                <img src='library.jpg' />
+            </section>
+            <section className={styles.textContainer}>
+                <h1>{title}</h1>
+                <p>Opened {localDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                })}</p>
             </section>
         </div>
     );

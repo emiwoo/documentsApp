@@ -1,6 +1,6 @@
 .tiptap {
     width: 615px;
-    height: 870px;
+    min-height: 870px;
     background-color: white;
     outline: none;
     border: 1px solid black;

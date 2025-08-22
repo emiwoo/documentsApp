@@ -15,7 +15,7 @@ function App() {
                 <Route path='/login' element={<Login />} />
                 <Route path='/dashboard' element={<Dashboard />} />
                 <Route path='/accountsettings' element={<AccountSettings />} />
-                <Route path='/document/:documentid' element={<Document />} />
+                <Route path='/document/:documentId' element={<Document />} />
             </Routes>
         </BrowserRouter>
     );

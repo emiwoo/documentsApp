@@ -7,6 +7,7 @@ import './modules/Document.css';
 import styles from './modules/Document.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { jsPDF } from 'jspdf';
 
 import ArrowLeftSolid from './assets/svgs/arrow-left-solid-full.svg?react';
 import DownloadSolid from './assets/svgs/download-solid-full.svg?react';
@@ -23,7 +24,7 @@ import TrashCanSolid from './assets/svgs/trash-can-solid-full.svg?react';
 import PencilSolid from './assets/svgs/pencil-solid-full.svg?react';
 
 function Document() {
-    const { documentid } = useParams();
+    const { documentId } = useParams();
     const [documentContent, setDocumentContent] = useState(null);
     const navigate = useNavigate();
     
@@ -39,7 +40,7 @@ function Document() {
 
     const loadDocumentContent = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/private/loaddocumentcontent/${documentid}`, { withCredentials: true });
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/private/loaddocumentcontent/${documentId}`, { withCredentials: true });
             setDocumentContent(response.data.body);
         } catch (error) {
             console.error(error.response.data);
@@ -64,17 +65,16 @@ function Document() {
 }
 
 function Editor() {
-    const [activeMenus, setActiveMenus] = useState(false);
+    const [activeMenus, setActiveMenus] = useState(null);
     const { editor } = useCurrentEditor();
-    const { documentid } = useParams();
+    const { documentId } = useParams();
     const timeout = useRef(null);
-
 
     const autoSave = () => {
         clearTimeout(timeout.current);
         timeout.current = setTimeout(async () => {
             try {
-                const response = await axios.patch(`${import.meta.env.VITE_API_URL}/api/private/autosavedocument/${documentid}`, {
+                const response = await axios.patch(`${import.meta.env.VITE_API_URL}/api/private/autosavedocument/${documentId}`, {
                     body: editor.getJSON()
                 }, { withCredentials: true });
                 console.log(response.data);
@@ -93,10 +93,10 @@ function Editor() {
 
     return (
         <>
-            <div className={`${styles.toolbarContainer} ${activeMenus ? styles.toolbarSlideIn : styles.toolbarSlideOut}`}>
+            <div className={`${styles.toolbarContainer} ${activeMenus !== null ? (activeMenus ? styles.toolbarSlideIn : styles.toolbarSlideOut) : ''}`}>
                 <Toolbar />
             </div>
-            <div className={`${styles.menuContainer} ${activeMenus ? styles.menuSlideIn : styles.menuSlideOut}`}>
+            <div className={`${styles.menuContainer} ${activeMenus !== null ? (activeMenus ? styles.menuSlideIn : styles.menuSlideOut) : ''}`}>
                 <DocumentMenu />
             </div>
             {!activeMenus && 
@@ -128,9 +128,9 @@ function Toolbar() {
         activeItalic: false,
         activeUnderline: false
     });
-    const [activeFont, setActiveFont] = useState('');
+    const [activeFont, setActiveFont] = useState('Inter');
     const [activeFontMenu, setActiveFontMenu] = useState(false);
-    const [activeTextType, setActiveTextType] = useState('');
+    const [activeTextType, setActiveTextType] = useState('Paragraph');
     const [activeTextTypeMenu, setActiveTextTypeMenu] = useState(false);
 
     useEffect(() => {
@@ -151,21 +151,36 @@ function Toolbar() {
     }, [fontSize, editor]);
 
     const findCurrentFontSize = () => {
+        if (!editor.isActive('paragraph')) return;
+        if (editor.state.selection.from === 1 && editor.state.selection.to === 1) return;
         const currentFontSize = editor.getAttributes('textStyle').fontSize;
-        console.log(currentFontSize);
+        if (!currentFontSize) return;
         setFontSize(Number(currentFontSize.slice(0, -2)));
     }
 
     const findCurrentMarks = () => {
-        setActiveIcon(prev => ({...prev, activeBold: editor.isActive('bold')}));
-        setActiveIcon(prev => ({...prev, activeItalic: editor.isActive('italic')}));
-        setActiveIcon(prev => ({...prev, activeUnderline: editor.isActive('underline')}));
+        setActiveIcon({
+            activeBold: editor.isActive('bold'),
+            activeItalic: editor.isActive('italic'),
+            activeUnderline: editor.isActive('underline')
+        });
     }
 
     const findCurrentFontFamily = () => {
         const currentFontFamily = editor.getAttributes('textStyle').fontFamily;
-        console.log(currentFontFamily);
         setActiveFont(currentFontFamily);
+    }
+
+    const findCurrentTextType = () => {
+        if (editor.isActive('heading', { level: 1 })) {
+            setActiveTextType('Heading 1');
+        } else if (editor.isActive('heading', { level: 2 })) {
+            setActiveTextType('Heading 2');
+        } else if (editor.isActive('heading', { level: 3 })) {
+            setActiveTextType('Heading 3');
+        } else if (editor.isActive('paragraph')) {
+            setActiveTextType('Paragraph');
+        }
     }
 
     useEffect(() => {
@@ -177,20 +192,19 @@ function Toolbar() {
             .run();
 
         editor.on('selectionUpdate', () => {
-            findCurrentFontSize();
             findCurrentMarks();
+            findCurrentFontSize();
             findCurrentFontFamily();
+            findCurrentTextType();
         });
-        
-        if (editor.state.selection.empty) return;
 
-        findCurrentFontSize();
         findCurrentMarks();
+        findCurrentFontSize();
         findCurrentFontFamily();
+        findCurrentTextType();
 
         return () => {
             editor.off('selectionUpdate', () => {
-                findCurrentFontSize();
                 findCurrentMarks();
             });
         }
@@ -199,10 +213,16 @@ function Toolbar() {
     const fonts = ['Inter', 'Merriweather', 'Montserrat', 'Open Sans', 'Roboto'];
     const types = ['Heading 1', 'Heading 2', 'Heading 3', 'Paragraph'];
 
+    const downloadPDF = () => {
+        const doc = new jsPDF();
+        doc.text(editor.getText(), 10, 10);
+        doc.save('document.pdf');
+    }
+
     return (
         <>
             <article className={styles.toolbar}>
-                <section>
+                <section onClick={downloadPDF}>
                     <DownloadSolid className={styles.icon} />
                 </section>
                 <section>
@@ -229,7 +249,7 @@ function Toolbar() {
                 </section>
                 <section>
                     <article onClick={() => setActiveTextTypeMenu(!activeTextTypeMenu)}>
-                        <p className={styles.selectedTextType}>Paragraph</p>
+                        <p className={styles.selectedTextType}>{activeTextType}</p>
                         <AngleDownSolid className={styles.angleDownSolid} />
                     </article>
                     {activeTextTypeMenu && <div className={`${styles.list} ${styles.typeList}`}>
@@ -340,23 +360,94 @@ function Toolbar() {
 }
 
 function DocumentMenu() {
+    const navigate = useNavigate();
+    const { documentId } = useParams();
+    const [activeRenameModal, setActiveRenameModal] = useState(false);
+
+    const removeDocument = async () => {
+        try {
+            const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/private/removedocument/${documentId}`, { withCredentials: true });
+            console.log(response.data);
+            navigate('/dashboard');
+        } catch (error) {
+            console.error(error.response.data);
+        }
+    }
 
     return (
-        <div className={styles.menu}>
-            <section className={styles.section1}>
-                <PencilSolid className={styles.section1Svg} />
-                <span>Rename</span>
-            </section>
-            <section>
-                <TrashCanSolid className={styles.section2Svg} />
-                <span>Remove</span>
-            </section>
-            <section className={styles.section3}>
-                <ArrowLeftSolid className={styles.section3Svg} />
-                <span>Go back</span>
-            </section>
-        </div>
+        <>
+            <div className={styles.menu}>
+                <section 
+                    className={styles.section1}
+                    onClick={() => {
+                        setActiveRenameModal(true);
+                    }}
+                >
+                    <PencilSolid className={styles.section1Svg} />
+                    <span>Rename</span>
+                </section>
+                <section onClick={removeDocument}>
+                    <TrashCanSolid className={styles.section2Svg} />
+                    <span>Remove</span>
+                </section>
+                <section 
+                    onClick={() => navigate('/dashboard')}
+                    className={styles.section3}
+                >
+                    <ArrowLeftSolid className={styles.section3Svg} />
+                    <span>Go back</span>
+                </section>
+            </div>
+            {activeRenameModal && <RenameModal 
+                setActiveRenameModal={setActiveRenameModal} 
+                documentId={documentId}
+            />}
+        </>
     );
 }
+
+function RenameModal({ setActiveRenameModal, documentId }) {
+    const [newTitle, setNewTitle] = useState('');
+
+    const renameDocument = async () => {
+        try {
+            const response = await axios.patch(`${import.meta.env.VITE_API_URL}/api/private/renamedocument/${documentId}`, {
+                newTitle: newTitle
+            }, { withCredentials: true });
+            console.log(response.data);
+            setActiveRenameModal(false);
+        } catch (error) {
+            console.error(error.response.data);
+        }
+    }
+
+    return (
+        <>
+            <div 
+                className={styles.dimmer}
+                onClick={(e) => e.stopPropagation()}
+            >    
+            </div>
+            <div 
+                className={styles.renameModal}
+                onClick={(e) => e.stopPropagation()}    
+            >
+                <h1>Rename document</h1>        
+                <input
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                />
+                <section>
+                    <button onClick={() => {
+                        setNewTitle('');
+                        setActiveRenameModal(false);
+                    }}>Cancel</button>
+                    <button onClick={renameDocument}>Submit</button>
+                </section>
+            </div>
+        </>
+    );
+}
+
 
 export default Document;

@@ -58,7 +58,7 @@
     top: 200px;
 }
 
-.registerModule img {
+.registerModule .eye {
     position: absolute;
     width: 25px;
     height: 25px;

@@ -2,6 +2,9 @@ import styles from './modules/AccountSettings.module.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import ArrowLeftSolid from './assets/svgs/arrow-left-solid-full.svg?react';
+import EyeSlashSolid from './assets/svgs/eye-slash-solid-full.svg?react';
+import EyeSolid from './assets/svgs/eye-solid-full.svg?react';
 
 function AccountSettings() {
     const [disabledEmail, setDisabledEmail] = useState(true);
@@ -10,15 +13,10 @@ function AccountSettings() {
     const [passwordVisibility, setPasswordVisibility] = useState(false);
     const [accountInfo, setAccountInfo] = useState({
         email: '',
-        is_verified: false,
-        tier: ''
     });
     const [emailErrors, setEmailErrors] = useState('');
     const [password, setPassword] = useState('');
     const [passwordErrors, setPasswordErrors] = useState('');
-    const [isVerifying, setIsVerifying] = useState(false);
-    const [verificationCode, setVerificationCode] = useState('');
-    const [verificationError, setVerificationError] = useState('');
 
     const getAccountInformation = async () => {
         try {
@@ -31,7 +29,6 @@ function AccountSettings() {
 
     const changeEmail = async () => {
         try {
-            setVerificationCode('');
             setEmailErrors('');
             if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(accountInfo.email)) {
                 setEmailErrors('Invalid email');
@@ -61,31 +58,6 @@ function AccountSettings() {
         }
     }
 
-    const verifyAccount = async () => {
-        setIsVerifying(true);
-        try {
-            const response = await axios.patch(`${import.meta.env.VITE_API_URL}/api/private/verifyaccount`, null, { withCredentials: true });
-            console.log(response.data);
-        } catch (error) {
-            console.error(error.response.data);
-        }
-    }
-
-    const submitVerificationCode = async () => {
-        setVerificationError('');
-        try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/private/submitverificationcode`, {
-                verificationCode: verificationCode
-            }, { withCredentials: true });
-            console.log(response.data);
-            getAccountInformation();
-            setIsVerifying(false);
-        } catch (error) {
-            console.error(error.response.data);
-            setVerificationError('Invalid code');
-        }
-    }
-
     useEffect(() => {
         getAccountInformation();
     }, []);
@@ -109,8 +81,7 @@ function AccountSettings() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <img 
-                    src='arrow-left-solid-full.svg' 
+                <ArrowLeftSolid 
                     width={45} 
                     height={45}
                     onClick={() => navigate('/dashboard')}    
@@ -147,38 +118,15 @@ function AccountSettings() {
                     setPassword('');
                 }}>Cancel</button>}
                 {passwordErrors !== '' && <p><i>{passwordErrors}</i></p>}
-                {!passwordVisibility && !disabledPassword && <img
-                    src='eye-solid-full.svg'
+                {!passwordVisibility && !disabledPassword && <EyeSolid
+                    className={styles.eye}
                     onClick={() => setPasswordVisibility(true)}
                 />}
-                {passwordVisibility && !disabledPassword && <img
-                    src='eye-slash-solid-full.svg'
+                {passwordVisibility && !disabledPassword && <EyeSlashSolid
+                    className={styles.eye}
                     onClick={() => setPasswordVisibility(false)}
                 />}
             </section>
-            <section className={styles.tier}>
-                <p>Current tier:</p>
-                {accountInfo.tier === 'free' && <span>FREE</span>}
-                {accountInfo.tier === 'paid' && <span>PAID</span>}
-                <button>Upgrade</button>
-            </section>
-            <section className={`${styles.tier} ${styles.verify}`}>
-                <p>Verified status:</p>
-                {accountInfo.is_verified && <span className={styles.verifiedAccount}>VERIFIED</span>}
-                {!accountInfo.is_verified && <span>NOT VERIFIED</span>}
-                {!accountInfo.is_verified && <button onClick={verifyAccount}>{isVerifying ? 'Resend code' : 'Verify'}</button>}
-            </section>
-            {isVerifying && !accountInfo.is_verified && <section className={styles.verifyBanner}>
-                <p>Check your email for the verification code</p>
-                <div>
-                    <input 
-                        placeholder='Enter code'
-                        onChange={(e) => setVerificationCode(e.target.value)}
-                        value={verificationCode}
-                    /><button onClick={submitVerificationCode}>Submit</button>
-                </div>
-                {verificationError !== '' && <p className={styles.codeError}>{verificationError}</p>}
-            </section>}
         </div>
     );
 }

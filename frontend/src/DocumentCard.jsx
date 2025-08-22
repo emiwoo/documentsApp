@@ -28,7 +28,7 @@ function DocumentCard({ title, documentId, modifiedAt, activeDocumentMenuId, set
             onClick={openDocument}
         >
             <section className={styles.imageContainer}>
-                <img src='ahri.jpg' />
+                <img src='library.jpg' />
             </section>
             <section className={styles.textContainer}>
                 <h1>{title}</h1>

@@ -2,6 +2,8 @@ import styles from './modules/Login.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
+import EyeSlashSolid from './assets/svgs/eye-slash-solid-full.svg?react';
+import EyeSolid from './assets/svgs/eye-solid-full.svg?react';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -37,12 +39,12 @@ function Login() {
                 value={password}
                 type={passwordVisibility ? 'text' : 'password'}
             />
-            {!passwordVisibility && <img 
-                src='eye-solid-full.svg' 
+            {!passwordVisibility && <EyeSolid 
+                className={styles.eye}
                 onClick={() => setPasswordVisibility(true)}
             />}
-            {passwordVisibility && <img 
-                src='eye-slash-solid-full.svg' 
+            {passwordVisibility && <EyeSlashSolid 
+                className={styles.eye}
                 onClick={() => setPasswordVisibility(false)}
             />}
             {error !== '' && <p className={styles.loginError}><i>{error}</i></p>}

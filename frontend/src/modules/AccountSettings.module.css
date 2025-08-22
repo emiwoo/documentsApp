@@ -22,6 +22,13 @@
     padding: 10px;
     font-weight: 500;
     font-size: 0.7rem;
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.userInfo button:hover {
+    filter: brightness(0.95);
 }
 
 .userInfo input {
@@ -111,7 +118,7 @@
     margin-bottom: 30px;
 }
 
-.userInfo img {
+.userInfo .eye {
     width: 25px;
     height: 25px;
     position: absolute;

@@ -248,3 +248,63 @@
         right: -300px;
     }
 }
+
+.renameModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width: 275px;
+    padding: 20px 30px;
+    border-radius: 8.5px;
+}
+
+.renameModal h1 {
+    font-size: 1.25rem;
+    font-weight: 400;
+}
+
+.renameModal input {
+    width: 275px;
+    margin: 10px 0 30px 0;
+    padding: 7.5px 10px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.renameModal section {
+    display: flex;
+    gap: 20px;
+    justify-content: end;
+}
+
+.renameModal button {
+    border: 1px black solid;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: 450;
+    background-color: white;
+}
+
+.renameModal button:hover {
+    filter: brightness(0.95);
+    cursor: pointer;
+}
+
+.renameModal:hover {
+    cursor: default;
+}
+
+.dimmer {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    top: 0;
+    left: 0;
+}
+
+.dimmer:hover {
+    cursor: default;
+}

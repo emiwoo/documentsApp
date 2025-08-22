@@ -53,7 +53,7 @@ app.get('/api/private/verifyinitialaccess', (req, res) => {
 
 app.get('/api/private/getaccountinformation', async (req, res) => {
     try {
-        const result = await pool.query(`SELECT email, is_verified, tier
+        const result = await pool.query(`SELECT email
                                          FROM users
                                          WHERE id = $1`, [req.user.id]);
         res.status(200).json(result.rows[0]);
@@ -108,11 +108,25 @@ app.get('/api/private/searchdashboard', async (req, res) => {
                                          FROM documents
                                          WHERE user_id = $1
                                             AND title ILIKE $2
+                                            AND in_trash = false
                                          ORDER BY modified_at DESC`, [req.user.id, `%${req.query.searchquery}%`]);
         res.status(200).json(result.rows);
     } catch (error) {
         console.error('/api/private/searchdashboard error: ', error);
         res.status(400).json({ error: 'Failed search query' });
+    }
+});
+
+app.get('/api/private/loadtrasheddocuments', async (req, res) => {
+    try {
+        const result = await pool.query(`SELECT id, title, modified_at, doc_id
+                                         FROM documents
+                                         WHERE user_id = $1
+                                            AND in_trash = true`, [req.user.id]);
+        res.status(200).json(result.rows);
+    } catch (error) {
+        console.error('/api/private/loadtrasheddocuments error: ', error);
+        res.status(400).json({ error: 'Failed to load trashed documents' });
     }
 });
 
@@ -160,28 +174,6 @@ app.post('/api/logoutuser', (req, res) => {
     res.status(200).json({ success: 'Logged out user and cleared cookie' });
 });
 
-app.post('/api/private/submitverificationcode', async (req, res) => {
-    try {
-        const isValidVerificationCode = await pool.query(`SELECT EXISTS (
-                                                          SELECT 1
-                                                          FROM verification_codes
-                                                          WHERE user_id = $1 
-                                                            AND verification_code = $2 
-                                                            AND NOW() < expires_at)`, [req.user.id, req.body.verificationCode]);
-        if (!isValidVerificationCode.rows[0].exists) {
-            res.status(422).json({ error: 'Invalid verification code' });
-            return;
-        }
-        pool.query(`UPDATE users
-                    SET is_verified = true
-                    WHERE id = $1`, [req.user.id]);
-        res.status(200).json({ success: 'Code is verified' });
-    } catch (error) {
-        console.error('/api/private/submitverificationcode error: ', error);
-        res.status(400).json({ error: 'Error in submitting verification code' });
-    }
-});
-
 app.patch('/api/private/autosavedocument/:doc_id', (req, res) => {
     try {
         pool.query(`UPDATE documents
@@ -206,8 +198,7 @@ app.patch('/api/private/changeemail', async (req, res) => {
             return;
         }
         pool.query(`UPDATE users
-                    SET email = $1,
-                        is_verified = false
+                    SET email = $1
                     WHERE id = $2`, [req.body.email, req.user.id]);
         res.status(200).json({ success: 'Updated email' });
     } catch (error) {
@@ -229,19 +220,6 @@ app.patch('/api/private/changepassword', async (req, res) => {
     }
 });
 
-app.patch('/api/private/verifyaccount', async (req, res) => {
-    try {
-        const email = await pool.query(`SELECT email
-                                        FROM users
-                                        WHERE id = $1`, [req.user.id]);
-        sendVerificationCode(email.rows[0].email, req);
-        res.status(200).json({ success: 'Sent verification code' });
-    } catch (error) {
-        console.error('/api/private/verifyaccount error: ', error);
-        res.status(400).json({ error: 'Unable to send verification code' });
-    }
-});
-
 app.patch('/api/private/renamedocument/:documentId', (req, res) => {
     try {
         pool.query(`UPDATE documents
@@ -252,6 +230,19 @@ app.patch('/api/private/renamedocument/:documentId', (req, res) => {
     } catch (error) {
         console.error('/api/private/renamedocument error: ', error);
         res.status(400).json({ error: 'Cannnot rename document' });
+    }
+});
+
+app.patch('/api/private/recoverdocuments', (req, res) => {
+    try {
+        pool.query(`UPDATE documents
+                    SET in_trash = FALSE
+                    WHERE user_id = $1
+                    AND doc_id = ANY($2)`, [req.user.id, req.body.documentIds]);
+        res.status(200).json({ success: 'Recovered documents' });
+    } catch (error) {
+        console.error('/api/private/recoverdocuments error: ', error);
+        res.status(400).json({ error: 'Cannot recover documents' });
     }
 });
 
@@ -274,10 +265,22 @@ app.delete('/api/private/removedocument/:documentId', (req, res) => {
                     SET in_trash = true
                     WHERE user_id = $1
                         AND doc_id = $2`, [req.user.id, req.params.documentId]);
-        res.status(204).json({ success: 'Removed document' });
+        res.status(200).json({ success: 'Removed document' });
     } catch (error) {
         console.error('/api/private/removedocument/:documentId error: ', error);
         res.status(400).json({ error: 'Could not remove document' });
+    }
+});
+
+app.delete('/api/private/deletedocuments', (req, res) => {
+    try {
+        pool.query(`DELETE FROM documents
+                    WHERE user_id = $1
+                        AND doc_id = ANY($2)`, [req.user.id, req.body.documentIds]);
+        res.status(200).json({ success: 'Permanently deleted documents' });
+    } catch (error) {
+        console.error('/api/private/deletedocuments error: ', error);
+        res.status(400).json({ error: 'Could not permanently delete documents' });
     }
 });
 
@@ -340,21 +343,6 @@ const createJWT = (id, res) => {
         sameSite: 'lax',
         path: '/'
     });
-}
-
-const sendVerificationCode = (email, req) => {
-    const verificationCode = Math.floor(Math.random() * 1000000);
-
-    transporter.sendMail({
-        from: '"Sir Blazing" <turkeytype@babyoil.com>',
-        to: `${email}`,
-        subject: 'Verification code',
-        text: `Your code is bitch ${verificationCode}`,
-        html: `<p>Your code is <strong>${verificationCode}</strong></p>`
-    });
-
-    pool.query(`INSERT INTO verification_codes (verification_code, user_id)
-                VALUES ($1, $2)`, [verificationCode, req.user.id]);
 }
 
 app.listen(3000, () => console.log('Server is running at port 3000'));

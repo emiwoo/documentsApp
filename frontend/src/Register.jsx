@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import styles from './modules/Register.module.css';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import EyeSlashSolid from './assets/svgs/eye-slash-solid-full.svg?react';
+import EyeSolid from './assets/svgs/eye-solid-full.svg?react';
 
 function Register() {
     const [email, setEmail] = useState('');
@@ -64,12 +66,12 @@ function Register() {
                 onChange={(e) => setPassword(e.target.value)}
                 type={passwordVisibility ? 'text' : 'password'}
             />
-            {!passwordVisibility && <img 
-                src='eye-solid-full.svg' 
+            {!passwordVisibility && <EyeSolid 
+                className={styles.eye}
                 onClick={() => setPasswordVisibility(true)}
             />}
-            {passwordVisibility && <img 
-                src='eye-slash-solid-full.svg' 
+            {passwordVisibility && <EyeSlashSolid
+                className={styles.eye} 
                 onClick={() => setPasswordVisibility(false)}
             />}
             <section className={styles.passwordErrorContainer}>
