@@ -10,6 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({
     origin: process.env.FRONTEND_DOMAIN,
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
     credentials: true
 }));
 
